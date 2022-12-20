@@ -7,4 +7,4 @@ services:
     ports:
       - 9443:9443
     volumes:
-      - /run/podman/podman.sock:/var/run/docker.sock:Z∂
+      - /run/podman/podman.sock:/var/run/docker.sock:Z
