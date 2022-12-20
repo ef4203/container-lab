@@ -15,3 +15,11 @@ sudo dnf -y install podman-compose
 
 If you are using some other kind of system, I'm sure the instructions will be
 similar and can be found using a search engine of your choosing ;).
+
+
+## Setup
+
+```
+sudo systemctl enable --now podman.socket
+
+```
