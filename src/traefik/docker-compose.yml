@@ -1,12 +1,15 @@
-version: '3'
+version: '3.8'
 
 services:
   traefik:
-    image: traefik
+    image: docker.io/traefik
     privileged: true
+    restart: unless-stopped
     command: --api.insecure=true --providers.docker
     ports:
-      - "80:80"
-      - "8080:8080"
+      - 80:80
+      - 8080:8080
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock 
+      - /run/podman/podman.sock:/var/run/docker.sock:Z
+    environment:
+      TZ: Europe/Berlin
