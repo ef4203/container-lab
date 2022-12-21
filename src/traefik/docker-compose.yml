@@ -9,7 +9,6 @@ services:
     ports:
       - 80:80
       - 443:443
-      - 8003:8080
     volumes:
       - /run/podman/podman.sock:/var/run/docker.sock:Z
       - letsencrypt:/letsencrypt
@@ -25,7 +24,7 @@ services:
       #- traefik.http.middlewares.strip.stripprefix.prefixes=/traefik
       #- traefik.http.routers.api.middlewares=authelia@docker
       #- traefik.http.routers.traefik.middlewares=authelia@docker
-      - traefik.http.services.traefik.loadbalancer.server.port=8003
+      - traefik.http.services.traefik.loadbalancer.server.port=8080
     environment:
       - TZ=Europe/Berlin
     command:

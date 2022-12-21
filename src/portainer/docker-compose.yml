@@ -6,8 +6,6 @@ services:
     image: docker.io/portainer/portainer-ce
     restart: always
     privileged: true
-    ports:
-      - 8001:9443
     volumes:
       - data:/data
       - /run/podman/podman.sock:/var/run/docker.sock:Z
@@ -18,7 +16,7 @@ services:
       - traefik.http.routers.portainer.rule=Host(`portainer.sylvanas.local`)
       - traefik.http.routers.portainer.entrypoints=http
       # - traefik.http.routers.portainer.tls.certresolver=letsencrypt
-      - traefik.http.services.portainer.loadbalancer.server.port=8001
+      - traefik.http.services.portainer.loadbalancer.server.port=9443
 
 volumes:
   data:
