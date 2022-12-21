@@ -1,10 +1,29 @@
-version: '3'
+version: '3.8'
 
 services:
   portainer:
+    container_name: portainer
     image: docker.io/portainer/portainer-ce
+    restart: always
     privileged: true
     ports:
-      - 9443:9443
+      - 8001:9443
     volumes:
+      - data:/data
       - /run/podman/podman.sock:/var/run/docker.sock:Z
+    networks:
+      - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.portainer.rule=Host(`portainer.sylvanas.local`)
+      - traefik.http.routers.portainer.entrypoints=http
+      # - traefik.http.routers.portainer.tls.certresolver=letsencrypt
+      - traefik.http.services.portainer.loadbalancer.server.port=8001
+
+volumes:
+  data:
+    driver: local
+    
+networks:
+  traefik:
+    external: true
