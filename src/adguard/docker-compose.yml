@@ -1,13 +1,35 @@
-version: '3.8'
+version: "3.8"
 
 services:
   adguard:
+    container_name: adguard
     image: docker.io/adguard/adguardhome
     restart: unless-stopped
-    privileged: true
     ports:
-      - '53:53'
-      - '53:53/udp'
-      - '3000:3000'
+      - 53:53
+      - 53:53/udp
+      - 3000:3000
+    volumes:
+      - work:/opt/adguardhome/work
+      - conf:/opt/adguardhome/conf
+    networks:
+      - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.adguard.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.adguard.entrypoints=http
+      #- traefik.http.routers.adguard.tls.certresolver=letsencrypt
+      - traefik.http.services.adguard.loadbalancer.server.port=3000
+      #- traefik.http.routers.adguard.middlewares=authelia@docker
     environment:
       TZ: Europe/Berlin
+
+volumes:
+  work:
+    driver: local
+  conf:
+    driver: local
+
+networks:
+  traefik:
+    name: traefik
