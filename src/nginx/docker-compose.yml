@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   nginx:
+    container_name: nginx
     image: docker.io/nginx
     restart: unless-stopped
     networks:
@@ -10,9 +11,9 @@ services:
       - 8004:80
     labels:
       - traefik.enable=true
-      - traefik.http.routers.adguard.rule=Host(`${DOMAIN}`)
-      - traefik.http.routers.adguard.entrypoints=http
-      - traefik.http.services.adguard.loadbalancer.server.port=8004
+      - traefik.http.routers.nginx.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.nginx.entrypoints=http
+      - traefik.http.services.nginx.loadbalancer.server.port=8004
     environment:
       - TZ=Europe/Berlin
       - NGINX_HOST=${DOMAIN}
