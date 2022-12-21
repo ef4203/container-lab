@@ -29,7 +29,7 @@ services:
     environment:
       - TZ=Europe/Berlin
     command:
-      # - --log.level=${LOG_LEVEL}
+      - --log.level=DEBUG
       - --providers.docker=true
       - --api.dashboard=true
       - --api.insecure=true
