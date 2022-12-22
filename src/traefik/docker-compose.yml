@@ -36,12 +36,12 @@ services:
       # - --certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare
       # - --certificatesresolvers.letsencrypt.acme.email=$ACME_EMAIL
       # - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
-      # - --entrypoints.http.address=:80
+      - --entrypoints.http.address=:80
       # - --entrypoints.http.http.redirections.entrypoint.to=https
       # - --entrypoints.http.http.redirections.entrypoint.scheme=https
-      # - --entrypoints.https.address=:443
-      # - --entrypoints.https.http.tls=true
-      # - --entrypoints.https.http.tls.certResolver=letsencrypt
+      - --entrypoints.https.address=:443
+      - --entrypoints.https.http.tls=true
+      - --entrypoints.https.http.tls.certResolver=letsencrypt
       # - --entrypoints.https.http.tls.domains[0].main=${DOMAIN}
       # - --entrypoints.https.http.tls.domains[0].sans=*.${DOMAIN}
 

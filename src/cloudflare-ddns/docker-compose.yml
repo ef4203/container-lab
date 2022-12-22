@@ -10,3 +10,4 @@ services:
       - ZONE=${DOMAIN}
       - SUBDOMAIN=${SUBDOMAIN}
       - PROXIED=true
+      - TZ=Europe/Berlin
