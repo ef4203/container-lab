@@ -1,7 +1,6 @@
 services:
   db:
     image: docker.io/linuxserver/mariadb:latest
-    command: '--default-authentication-plugin=mysql_native_password'
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
