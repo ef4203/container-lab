@@ -17,16 +17,16 @@ services:
       - 3306
       - 33060
 
-  wordpress:
+  wp:
     image: docker.io/wordpress:latest
     volumes:
       - wp_data:/var/www/html
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.nginx.rule=Host(`${DOMAIN}`)
-      - traefik.http.routers.nginx.entrypoints=http
-      - traefik.http.services.nginx.loadbalancer.server.port=80
+      - traefik.http.routers.${INSTANCE_NAME}.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.${INSTANCE_NAME}.entrypoints=http
+      - traefik.http.services.${INSTANCE_NAME}.loadbalancer.server.port=80
     networks:
       - traefik
       - wordpress

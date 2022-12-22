@@ -8,9 +8,9 @@ services:
       - traefik
     labels:
       - traefik.enable=true
-      - traefik.http.routers.nginx.rule=Host(`${DOMAIN}`)
-      - traefik.http.routers.nginx.entrypoints=http
-      - traefik.http.services.nginx.loadbalancer.server.port=80
+      - traefik.http.routers.${INSTANCE_NAME}.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.${INSTANCE_NAME}.entrypoints=http
+      - traefik.http.services.${INSTANCE_NAME}.loadbalancer.server.port=80
     environment:
       - TZ=Europe/Berlin
       - NGINX_HOST=${DOMAIN}
