@@ -1,0 +1,51 @@
+services:
+  db:
+    image: mariadb:10.9.4
+    command: '--default-authentication-plugin=mysql_native_password'
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - db_data:/var/lib/mysql
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=somewordpress
+      - MYSQL_DATABASE=wordpress
+      - MYSQL_USER=wordpress
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_INITDB_SKIP_TZINFO=1
+    expose:
+      - 3306
+      - 33060
+
+  wordpress:
+    image: wordpress:6.1.1-php8.2
+    volumes:
+      - wp_data:/var/www/html
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.nginx.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.nginx.entrypoints=http
+      - traefik.http.services.nginx.loadbalancer.server.port=80
+    networks:
+      - traefik
+      - wordpress
+    environment:
+      - WORDPRESS_DB_HOST=db
+      - WORDPRESS_DB_USER=wordpress
+      - WORDPRESS_DB_PASSWORD=${DB_PASSWORD}
+      - WORDPRESS_DB_NAME=wordpress
+    depends_on:
+      - db
+
+volumes:
+  db_data:
+      driver: local
+  wp_data:
+      driver: local
+
+networks:
+  traefik:
+    name: traefik
+  wordpress:
+    name: wordpress
