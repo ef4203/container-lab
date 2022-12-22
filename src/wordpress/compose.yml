@@ -44,4 +44,4 @@ networks:
   traefik:
     name: traefik
   wordpress:
-    name: wordpress
+    name: ${INSTANCE_NAME}-wordpress
