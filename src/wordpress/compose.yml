@@ -1,47 +1,46 @@
 services:
-  db:
-    image: docker.io/linuxserver/mariadb:latest
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
-      - db_data:/var/lib/mysql
-    restart: unless-stopped
-    environment:
-      - MYSQL_ROOT_PASSWORD=somewordpress
-      - MYSQL_DATABASE=wordpress
-      - MYSQL_USER=wordpress
-      - MYSQL_PASSWORD=${DB_PASSWORD}
-      - MYSQL_INITDB_SKIP_TZINFO=1
-    expose:
-      - 3306
-      - 33060
-
   wp:
     image: docker.io/wordpress:latest
     volumes:
       - wp_data:/var/www/html
+    ports:
+      - "8888:80"
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${INSTANCE_NAME}.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.${INSTANCE_NAME}.rule=Host(${DOMAIN})
       - traefik.http.routers.${INSTANCE_NAME}.entrypoints=http
       - traefik.http.services.${INSTANCE_NAME}.loadbalancer.server.port=80
     networks:
       - traefik
       - wordpress
     environment:
-      - WORDPRESS_DB_HOST=db
-      - WORDPRESS_DB_USER=wordpress
-      - WORDPRESS_DB_PASSWORD=${DB_PASSWORD}
-      - WORDPRESS_DB_NAME=wordpress
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
     depends_on:
       - db
 
+  db:
+    image: docker.io/yobasystems/alpine-mariadb
+    volumes:
+      - db_data:/var/lib/mysql
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    restart: unless-stopped
+    networks:
+      - wordpress
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+
 volumes:
   db_data:
-      driver: local
+    driver: local
   wp_data:
-      driver: local
+    driver: local
 
 networks:
   traefik:

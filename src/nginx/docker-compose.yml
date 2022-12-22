@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   nginx:
     image: docker.io/nginx
@@ -8,7 +6,7 @@ services:
       - traefik
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${INSTANCE_NAME}.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.${INSTANCE_NAME}.rule=Host(${DOMAIN})
       - traefik.http.routers.${INSTANCE_NAME}.entrypoints=http
       - traefik.http.services.${INSTANCE_NAME}.loadbalancer.server.port=80
     environment:

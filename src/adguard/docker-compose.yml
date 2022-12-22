@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   adguard:
     container_name: adguard
@@ -15,11 +13,9 @@ services:
       - traefik
     labels:
       - traefik.enable=true
-      - traefik.http.routers.adguard.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.adguard.rule=Host(${DOMAIN})
       - traefik.http.routers.adguard.entrypoints=http
-      #- traefik.http.routers.adguard.tls.certresolver=letsencrypt
       - traefik.http.services.adguard.loadbalancer.server.port=3000
-      #- traefik.http.routers.adguard.middlewares=authelia@docker
     environment:
       TZ: Europe/Berlin
 
