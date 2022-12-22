@@ -28,6 +28,10 @@ services:
     restart: unless-stopped
     networks:
       - wordpress
+    expose:
+      - 3306
+    labels:
+      - traefik.enable=false
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: wordpress
@@ -44,4 +48,3 @@ networks:
   traefik:
     name: traefik
   wordpress:
-    name: ${INSTANCE_NAME}-wordpress
