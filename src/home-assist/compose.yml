@@ -1,0 +1,49 @@
+services:
+  ha-app:
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    restart: unless-stopped
+    privileged: true
+    dns:
+      - 1.1.1.1
+      - 1.0.0.1
+    volumes:
+      - ha-conf:/config
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.${STACK}.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.${STACK}.entrypoints=https
+      - traefik.http.routers.${STACK}.tls.certresolver=letsencrypt
+      - traefik.http.services.${STACK}.loadbalancer.server.port=8123
+    networks:
+      - traefik
+  esp-app:
+    image: esphome/esphome
+    restart: unless-stopped
+    privileged: true
+    dns:
+      - 1.1.1.1
+      - 1.0.0.1
+    volumes:
+      - esp-conf:/config
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.${STACK}esp.rule=Host(`esp-${DOMAIN}`)
+      - traefik.http.routers.${STACK}esp.entrypoints=https
+      - traefik.http.routers.${STACK}esp.tls.certresolver=letsencrypt
+      - traefik.http.services.${STACK}esp.loadbalancer.server.port=6052
+    networks:
+      - traefik
+      
+volumes:
+  esp-conf:
+    driver: local
+  ha-conf:
+    driver: local
+
+networks:
+  traefik:
+    name: traefik

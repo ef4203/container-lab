@@ -6,9 +6,11 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${INSTANCE_NAME}.rule=Host(${DOMAIN})
-      - traefik.http.routers.${INSTANCE_NAME}.entrypoints=http
-      - traefik.http.services.${INSTANCE_NAME}.loadbalancer.server.port=80
+      - traefik.docker.network=traefik
+      - traefik.http.routers.${STACK}.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.${STACK}.entrypoints=https
+      - traefik.http.routers.${STACK}.tls.certresolver=letsencrypt
+      - traefik.http.services.${STACK}.loadbalancer.server.port=80
     networks:
       - traefik
       - wordpress
