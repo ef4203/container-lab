@@ -9,6 +9,7 @@ services:
     volumes:
       - work:/opt/adguardhome/work
       - conf:/opt/adguardhome/conf
+      - /etc/localtime:/etc/localtime:ro
     networks:
       - traefik
     labels:

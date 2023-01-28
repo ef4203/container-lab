@@ -18,6 +18,7 @@ services:
       - traefik.http.services.${STACK}.loadbalancer.server.port=8123
     networks:
       - traefik
+
   esp-app:
     image: esphome/esphome
     restart: unless-stopped
