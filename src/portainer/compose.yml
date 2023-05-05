@@ -1,0 +1,21 @@
+services:
+  portainer:
+    container_name: portainer
+    image: docker.io/portainer/portainer-ce:2.18.2-alpine
+    restart: always
+    privileged: true
+    ports:
+      - 9443:9443
+    volumes:
+      - data:/data
+      - /var/run/docker.sock:/var/run/docker.sock:Z
+    networks:
+      - master
+
+volumes:
+  data:
+    driver: local
+
+networks:
+  master:
+    external: true
