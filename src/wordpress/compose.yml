@@ -4,15 +4,8 @@ services:
     volumes:
       - wp_data:/var/www/html
     restart: unless-stopped
-    labels:
-      - traefik.enable=true
-      - traefik.docker.network=traefik
-      - traefik.http.routers.${STACK}.rule=Host(`${DOMAIN}`)
-      - traefik.http.routers.${STACK}.entrypoints=https
-      - traefik.http.routers.${STACK}.tls.certresolver=letsencrypt
-      - traefik.http.services.${STACK}.loadbalancer.server.port=80
     networks:
-      - traefik
+      - master
       - wordpress
     environment:
       WORDPRESS_DB_HOST: db:3306
@@ -32,8 +25,6 @@ services:
       - wordpress
     expose:
       - 3306
-    labels:
-      - traefik.enable=false
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: wordpress
@@ -47,6 +38,7 @@ volumes:
     driver: local
 
 networks:
-  traefik:
-    name: traefik
+  master:
+    name: master
+    external: true
   wordpress:

@@ -1,6 +1,6 @@
 services:
   app:
-    container_name: proxy
+    container_name: proxy-manager
     image: docker.io/jc21/nginx-proxy-manager:2.10.2
     restart: unless-stopped
     ports:
