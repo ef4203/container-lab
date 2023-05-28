@@ -1,0 +1,49 @@
+services:
+  shopware:
+    image: docker.io/dockware/play:6.5.1.0
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - db_volume:/var/lib/mysql
+      - shop_volume:/var/www/html
+    networks:
+      - shopware
+      - master
+  code-server:
+    image: docker.io/linuxserver/code-server:4.13.0
+    container_name: code-server
+    environment:
+      - PUID=33
+      - PGID=33
+      - TZ=Europe/Berlin
+    volumes:
+      - shop_volume:/config/workspace
+    ports:
+      - 8443:8443
+    networks:
+      - shopware
+    depends_on:
+      - shopware
+  phpmyadmin:
+    image: docker.io/phpmyadmin:5.2
+    restart: always
+    networks:
+      - shopware
+    ports:
+      - 8080:80
+    environment:
+      - TZ=Europe/Berlin
+      - PMA_ARBITRARY=1
+
+volumes:
+  db_volume:
+    driver: local
+  shop_volume:
+    driver: local
+
+networks:
+  master:
+    name: master
+    external: true
+  shopware:
